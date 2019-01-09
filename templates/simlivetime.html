@@ -1,0 +1,24 @@
+{% extends "modelbase.html" %}
+
+{%- macro getlivetime(simdata, primary) -%}
+
+{%- endmacro -%}
+
+{% block pagecontent %}
+<table id="livetimetable" class="table">
+    {% set isos=['U238', 'Th232', 'K40'] %}
+    <thead>
+	<tr><th>Component</th>{%- for iso in isos %} <th>{{ iso }}</th> {%- endfor %}</tr>
+    </thead>
+    <tbody> {% for component in [g.model.assemblyroot] recursive %}
+	<tr>
+	    <td>{{ component.name | indent(first=true, width=3*loop.depth0) }}</td>
+	    {% for iso in isos %} 
+	    <td>{{ getlivetime(component, iso) }}</td>
+	    {% endfor %}
+	</tr>
+    {{ loop(component.getcomponents()) }}	
+    {% endfor %}</tbody>
+    
+{% endfor %}
+{% endblock %}
