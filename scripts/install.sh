@@ -26,6 +26,18 @@ if ! pip install -r "requirements.txt" ; then
     exit 2
 fi
 
+echo "Populating simulation database"
+if ! $(dirname $0)/fillsimdata.py simdata.tar.gz ; then
+    echo "Error populating simulation data" >&2
+    exit 3
+fi
+
+echo "Adding demo model"
+if ! $(dirname $0)/addmodel.py models/hpgedetector.json ; then
+    echo "Error adding model" >&2
+    exit 4
+fi
+
 #exit the virtual environment
 deactivate
 

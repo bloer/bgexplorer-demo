@@ -1,4 +1,9 @@
-{% extends "modelbase.html" %}
+{# make sure to get the navbar, etc #}
+{% extends "base.html" %}
+
+{# if this is an endpoint of the modelviewer blueprint, use this instead:
+{% extends "modelbase.html" %} 
+#}
 
 {% block pagecontent %}
     <p>My custom content goes here</p>

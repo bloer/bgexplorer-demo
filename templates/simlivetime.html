@@ -1,7 +1,7 @@
 {% extends "modelbase.html" %}
 
-{%- macro getlivetime(simdata, primary) -%}
-
+{%- macro getlivetime(component, primary) -%}
+{{ g.model.getsimdata(component=component)|selectattr('spec.name','eq',primary)|sum(attribute='livetime',) }}
 {%- endmacro -%}
 
 {% block pagecontent %}
@@ -10,15 +10,22 @@
     <thead>
 	<tr><th>Component</th>{%- for iso in isos %} <th>{{ iso }}</th> {%- endfor %}</tr>
     </thead>
-    <tbody> {% for component in [g.model.assemblyroot] recursive %}
+    <tbody> {% for placement in g.model.assemblyroot.components recursive %}
+	{% set component = placement.component %}
+	{% set simdata = g.model.getsimdata(component=component)|list %}
 	<tr>
-	    <td>{{ component.name | indent(first=true, width=3*loop.depth0) }}</td>
+	    <td style="padding-left: {{ loop.depth0 }}em">
+		<a href="{{ url_for('.componentview',component=component) }}">
+		    {{ placement.name }}
+		</a>
+	    </td>
 	    {% for iso in isos %} 
-	    <td>{{ getlivetime(component, iso) }}</td>
+		{% set specdata = simdata|selectattr('spec.name','eq',iso) %}
+		{% set livetime = specdata|sum(attribute='livetime') %}
+	    <td>{% if livetime %}{{ "{:~.0fP}".format(livetime.to('year')) }}{% endif %}</td>
 	    {% endfor %}
 	</tr>
-    {{ loop(component.getcomponents()) }}	
+    {% if component.components %}{{ loop(component.components) }}{% endif %}
     {% endfor %}</tbody>
     
-{% endfor %}
 {% endblock %}

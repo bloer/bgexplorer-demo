@@ -26,7 +26,7 @@ SERVER_PORT=$(grep "SERVER_PORT" "$CFGFILE" | awk '{print $3}')
 echo "Binding to port $SERVER_PORT"
 
 CMD='demo:create_app(cfgfile="'"$CFGFILE"'")'
-"$GUNICORN" -b 0.0.0.0:$SERVER_PORT -t 600 -w 1 $CMD
+"$GUNICORN" --reload -b 0.0.0.0:$SERVER_PORT -t 600 -w 1 $CMD
 
 
 
