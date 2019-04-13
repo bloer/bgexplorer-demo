@@ -32,10 +32,10 @@ import pymongo
 import bgexplorer
 import numpy as np
 from bgexplorer import create_app as base_app
-from bgexplorer.bgmodelbuilder import units
-from bgexplorer.bgmodelbuilder.simulationsdb.mongosimsdb import MongoSimsDB
-from bgexplorer.bgmodelbuilder.simulationsdb.simdoceval import SpectrumAverage
-from bgexplorer.bgmodelbuilder.utilities import Isotope
+from bgmodelbuilder import units
+from bgmodelbuilder.simulationsdb.mongosimsdb import MongoSimsDB
+from bgmodelbuilder.simulationsdb.simdoceval import SpectrumAverage
+from bgmodelbuilder.utilities import Isotope
 from flask import g, render_template
 import logging
 log = logging.getLogger(__name__)

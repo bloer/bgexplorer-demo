@@ -9,13 +9,13 @@ import sys
 
 def addmodel(filename, cfgfile='config.default.py'):
     """Add a model to the database"""
-    cfg = Config('')
-    cfg.from_pyfile(cfgfile)
+    config = Config('')
+    config.from_pyfile(cfgfile)
     dburi = config.get('MODELDB_URI',None)
     collection = config.get('MODELDB_COLLECTION','bgmodels')
     modeldb = ModelDB(dburi=dburi, collection=collection)
     model = json.load(open(filename))
-    modeldb.write_model(model)
+    modeldb.write_model(model, temp=False)
 
 if __name__ == '__main__':
     filename = sys.argv[1] if len(sys.argv)>1 else 'models/hpgedetector.json'
