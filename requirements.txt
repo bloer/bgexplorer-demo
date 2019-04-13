@@ -1,4 +1,3 @@
-#git+https://github.com/bloer/bgexplorer@develop#egg=bgexplorer
-/home/bloer/bgmodeling/bgexplorer
+git+https://github.com/bloer/bgexplorer@develop#egg=bgexplorer
 gunicorn
 
