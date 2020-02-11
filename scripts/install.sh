@@ -21,7 +21,7 @@ fi
 source $VIRTENV/bin/activate
 
 echo "Installing required dependencies"
-if ! pip install --process-dependency-links -r "requirements.txt" ; then
+if ! pip install -r "requirements.txt" ; then
     echo "Error installing dependencies ; exiting" >&2
     exit 2
 fi
