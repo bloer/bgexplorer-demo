@@ -20,7 +20,7 @@ MODELDB_COLLECTION = "bgmodels"
 DEBUG = True
 TESTING = False
 TEMPLATE_AUTO_RELOAD = True
-SECRET_KEY = "youshouldreplacethiswitharealsecretkey"
+SECRET_KEY = "asdfasl;fkjatjpagm34taspdj"
 
 ## Authentication. Set BASIC_AUTH_FORCE=True to require password
 BASIC_AUTH_FORCE = False

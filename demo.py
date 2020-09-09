@@ -30,8 +30,8 @@ pre-provided by background explorer.
 import os
 import pymongo
 import bgexplorer
+from bgexplorer.dbview import json_upload_handler
 import numpy as np
-from bgexplorer import create_app as base_app
 from bgmodelbuilder import units
 from bgmodelbuilder.simulationsdb.mongosimsdb import MongoSimsDB
 from bgmodelbuilder.simulationsdb.simdoceval import SpectrumAverage
@@ -99,7 +99,7 @@ def livetime(match, hits):
         livetime (float): the total summed livetime represented by the hits
     """
     nprimaries = sum(doc['nprimaries'] for doc in hits)
-    #this function shouldn't be called if emissionrate==0
+    #this function shouldn't be called if emissionrate==0, but it might
     return nprimaries / match.emissionrate
 
 
@@ -124,28 +124,39 @@ values_units = {key: 'dru' for key in values}
 
 def create_app(cfgfile='config.default.py'):
     """Create the base Flask bgexplorer app"""
-    app = base_app(cfgfile, values=values, values_units=values_units)
+    app = bgexplorer.BgExplorer(cfgfile)
     
-    #now set up the database connection
+    #now set up the database connection and interpreters
     client = pymongo.MongoClient(app.config['SIMDB_URI'])
     db = client[app.config['SIMDB_DATABASE']]
     collection = db[app.config['SIMDB_COLLECTION']]
     
-    MongoSimsDB(collection, query, livetime, livetimeprojection, app=app)
+    simdb = MongoSimsDB(collection, query, livetime, livetimeprojection)
+    dbview = bgexplorer.SimsDbView(simsdb=simdb,
+                                   summarypro = {
+                                       'id': '$_id',
+                                       'volume': 1,
+                                       'primary': 1,
+                                       'nprimaries': 1,
+                                   },
+                                   summarycolumns = ['volume','primary',
+                                                     'nprimaries'],
+                                   values=values,
+                                   values_units=values_units,
+                                   upload_handler=json_upload_handler)
+    app.addsimview('hpge', dbview)
+    # add a secondary database for testing. This could have completely 
+    # different backends, views, etc
+    testdb = MongoSimsDB(db.testcollection, query, livetime, livetimeprojection)
+    testview = dbview.clone(testdb)
+    app.addsimview('testing', testview)
+                                   
+
 
     #add some custom views
     modelviewer = app.blueprints['modelviewer']
     custom = app.blueprints['custom']
-    simsviewer = app.extensions['SimulationsViewer']
-    simsviewer.summarypro = {
-                             'id': '$_id',
-                             'volume': 1,
-                             'primary': 1,
-                             'nprimaries': 1,
-                             #only works on >3.2
-                             #'totalhits': {'$sum':'hits'},
-                           }
-    simsviewer.summarycolumns = ['volume','primary','nprimaries']
+    
 
     @app.template_global()
     def getlivetime(component, primary):
