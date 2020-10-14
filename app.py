@@ -123,7 +123,7 @@ values_units = {key: 'dru' for key in values}
 
 spectra = {'gammas': DirectSpectrum('hits', bin_edges=bins, binsunit=units.keV,
                                     scale=1./detector_mass)}
-spectra_units = {key: 'dru' for key in spectra}
+spectra_units = {key: '1/kg/day' for key in spectra}
 values_spectra = {key: 'gammas' for key in values}
 
 def create_app(cfgfile='config.default.py'):
