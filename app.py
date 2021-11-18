@@ -70,7 +70,7 @@ def query(request):
         request.addstatus('error')
 
     query = {
-        'volume': request.component.name,
+        'volume': request.simvolume,
         'primary': primary,
         'spectrum': None
     }
