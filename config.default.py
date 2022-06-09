@@ -16,6 +16,10 @@ SIMDB_COLLECTION = "simulations"
 MODELDB_URI = MONGODB_DEFAULT_URI
 MODELDB_COLLECTION = "bgmodels"
 
+## Assay database
+ASSAYDB_URI = MONGODB_DEFAULT_URI
+ASSAYDB_COLLECTION = "assays"
+
 ## Server configuration. See Flask documentation. 
 DEBUG = True
 TESTING = False
