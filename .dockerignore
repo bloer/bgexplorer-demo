@@ -1,0 +1,6 @@
+__pycache__/
+virtenv/
+venv/
+db/
+*.log
+logs/
