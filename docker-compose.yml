@@ -3,13 +3,17 @@ services:
   app:
     build: .
     volumes:
-      - ./logs:/var/log
+      - logs:/var/log
     ports:
-      - 5000:5000
+      - "${BGEXPLORER_PORT}:5000"
     depends_on:
       - mongo
 
   mongo:
-    image: mongo
+    image: mongo:5
     volumes:
-      - ./db:/var/lib/mongodb
+      - mongodata:/data/db
+
+volumes:
+   mongodata:
+   logs:
